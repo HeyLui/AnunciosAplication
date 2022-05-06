@@ -1,0 +1,57 @@
+﻿@model ADLF.Models.CategoriaAd
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<section class="content">
+    <section class="block">
+        <div class="container">
+            @*<section>
+                    <div class="alert alert-warning" role="alert">
+                        <h2 class="alert-heading">You don't have an account!</h2>
+                        <p>
+                            You can submit only 1 ad at a time. To submit more, you need to
+                            <a href="sign-in.html" class="link"><strong>Sign In</strong></a> or
+                            <a href="register.html" class="link"><strong>Register</strong></a>
+                        </p>
+                    </div>
+                </section>*@
+            <form class="form form-submit" asp-action="Create" enctype="multipart/form-data">
+                <section>
+                    <h2 class="text-danger text-caps">Nuevo Categoria</h2>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="title" class="col-form-label required">Nombre de la categoria</label>
+                                <input asp-for="CategoriaName" type="text" class="form-control" id="title" placeholder="Nombre de categoria" required>
+                            </div>
+                            <!--end form-group-->
+                        </div>
+                        <!--end col-md-8-->
+                        <div class="col-md-5">
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Crear Categoria<i class="fa fa-chevron-right"></i></button>
+
+                            </div>
+                            <!--end form-group-->
+                        </div>
+                    </div>
+                    
+                </section>
+                <!--end basic information-->
+            </form>
+            <!--end form-submit-->
+        </div>
+        <!--end container-->
+    </section>
+    <!--end block-->
+</section>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

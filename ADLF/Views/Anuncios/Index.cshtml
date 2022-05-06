@@ -1,0 +1,298 @@
+﻿
+@model IEnumerable<ADLF.Models.Anuncio>
+
+@{
+    ViewData["Title"] = "Anuncios";
+}
+
+
+
+
+
+
+
+<section class="content">
+    <section class="block">
+        <div class="container">
+            <!--============ Section Title===================================================================-->
+            <div class="section-title clearfix">
+                <div class="float-left float-xs-none">
+
+                    <form action="@Url.Action("Index", "Anuncios")" method="post">
+                        <input name="buscador" type="text" class="small width-250px " id="title" placeholder="Buscar por nombre, categoria">
+
+                        <label class="mr-3 align-text-bottom"></label>
+                        <select value="Buscar" name="opcion" id="sorting" class="small width-200px" data-placeholder="Default Sorting" data-enable-search="true">
+                            <option value="" selected>Orderna alfabeticamente </option>
+                            <option name="opcion" value="A - Z">A - Z</option>
+                            <option name="opcion" value="Categoria">Categoria</option>
+                            <option name="opcion" value="Mayor votado">Mayor votado</option>
+                            <option name="opcion" value="Menor votado">Menor votado</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary small">Buscar</button>
+                    </form>
+
+
+
+
+                </div>
+                <div class="float-right d-xs-none thumbnail-toggle">
+                    @*<a href="#" class="change-class active" data-change-from-class="list" data-change-to-class="grid" data-parent-class="items">
+                            <i class="fa fa-th"></i>
+                        </a>
+                        <a href="#" class="change-class" data-change-from-class="grid" data-change-to-class="list" data-parent-class="items">
+                            <i class="fa fa-th-list"></i>
+                        </a>*@
+                </div>
+            </div>
+            <!--============ Items ==========================================================================-->
+            <div class="items grid grid-xl-3-items grid-lg-3-items grid-md-3-items">
+
+                @*FOREACH EMPIEZA AQUI*@
+
+                @foreach (var item in Model)
+
+                {
+
+                    <div class="item">
+                        @*<div class="ribbon-featured" style="background-color:red;">Featured</div>*@
+                        <!--end ribbon-->
+                        <div class="wrapper">
+                            <div class="image">
+
+                                <h3>
+
+                                    @*<a href="#" class="tag category" name="btnfiltro">@Html.DisplayFor(modelItem => item.IdTipoadNavigation.CategoriaName)</a>*@
+                                    <a asp-action="Details" asp-route-id="@item.IdAd" class="title text-caps">@Html.DisplayFor(modelItem => item.NombreAd)</a>
+                                    <span class="tag">AD</span>
+
+                                </h3>
+
+                                <a asp-action="Details" asp-route-id="@item.IdAd" class="image-wrapper">
+                                    @*IMAGEN DEL ANUNCIO*@
+                                    @if (item.Imagen != null)
+                                    {
+                                        <img src="@Url.Action("convertirImagen", "Anuncios", new { codigo = item.IdAd, img = 1 })" style="width:340px;height:260px;" alt="">
+                                    }
+
+
+                                </a>
+                            </div>
+                            <!--end image-->
+                            <form action="@Url.Action("Index", "Anuncios")" method="post">
+                                <h4 class="disabled">
+                                    <strong class="text-caps disabled"><i class="fa fa-arrow-down "></i>CALIFICACION</strong>
+                                    <input type="submit" name="em" hidden value="@Html.DisplayFor(modelItem => item.IdTipoadNavigation.IdTipoad)" />
+                                    
+                                    <button type="submit" name="btnfiltro" class="badge badge-danger text-caps"  style="border:none;cursor:alias;margin-left:145px;" value="@Html.DisplayFor(modelItem => item.IdTipoadNavigation.CategoriaName)">@Html.DisplayFor(modelItem => item.IdTipoadNavigation.CategoriaName)</button>
+
+                                </h4>
+
+
+                            </form>
+                            @if (item.Calificacion == 0)
+                            {
+                                <div class="price">✰ @Html.DisplayFor(modelItem => item.Calificacion)</div>
+                            }
+                            else
+                            {
+                                <div class="price">⭐ @Html.DisplayFor(modelItem => item.Calificacion)</div>
+                            }
+
+
+                        <div class="meta">
+                            <figure>
+                                <i class="fa fa-calendar-o"></i>@Html.DisplayFor(modelItem => item.Fecha)
+                            </figure>
+                            
+                            <figure style="float:right;">
+                                <a href="#" class="text-warning" style="cursor:default;">
+
+                                    @if (item.Calificacion >= 5)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    }
+                                    else if (item.Calificacion >= 4)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+
+                                    }
+                                    else if (item.Calificacion >= 3)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+
+                                    }
+                                    else if (item.Calificacion >= 2)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+
+                                    }
+                                    else if (item.Calificacion >= 1)
+                                    {
+                                        <i class="fa fa-star"></i>
+
+                                    }
+                                    else
+                                    {
+                                        <i asp-action="Details" asp-route-id="@item.IdAd" class="text-secondary">SIN VOTOS</i>
+                                    }
+
+
+
+                                </a>
+                                @*<a>
+                <i class="fa fa-user"></i>
+            </a>*@
+                            </figure>
+                        </div>
+                            <!--end meta-->
+                            <div class="description">
+                                <p>@Html.DisplayFor(modelItem => item.Descripcion)</p>
+                            </div>
+                            <!--end description-->
+                            <a asp-action="Details" asp-route-id="@item.IdAd" class="detail text-caps underline">Ver Anuncio</a>
+                        </div>
+                    </div>
+                }
+                <!--end item-->
+
+
+
+            </div>
+            <!--============ End Items ======================================================================-->
+            <div class="page-pagination">
+                <nav aria-label="Pagination">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">
+                                    <i class="fa fa-chevron-left"></i>
+                                </span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">
+                                    <i class="fa fa-chevron-right"></i>
+                                </span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!--end page-pagination-->
+        </div>
+        <!--end container-->
+    </section>
+    <!--end block-->
+</section>
+<!--end content-->
+
+<section class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <a href="#" class="brand">
+                    <img src="~/assets/img/logo.png" alt="">
+                </a>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut nec tincidunt arcu, sit amet
+                    fermentum sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra.
+                </p>
+            </div>
+            <!--end col-md-5-->
+            <div class="col-md-3">
+                <h2>Navigation</h2>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <nav>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="#">Home</a>
+                                </li>
+                                <li>
+                                    <a href="#">Listing</a>
+                                </li>
+                                <li>
+                                    <a href="#">Pages</a>
+                                </li>
+                                <li>
+                                    <a href="#">Extras</a>
+                                </li>
+                                <li>
+                                    <a href="#">Contact</a>
+                                </li>
+                                <li>
+                                    <a href="#">Submit Ad</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <nav>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="#">My Ads</a>
+                                </li>
+                                <li>
+                                    <a href="#">Sign In</a>
+                                </li>
+                                <li>
+                                    <a href="#">Register</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!--end col-md-3-->
+            <div class="col-md-4">
+                <h2>Contact</h2>
+                <address>
+                    <figure>
+                        124 Abia Martin Drive<br>
+                        New York, NY 10011
+                    </figure>
+                    <br>
+                    <strong>Email:</strong> <a href="#">hello@example.com</a>
+                    <br>
+                    <strong>Skype: </strong> Craigs
+                    <br>
+                    <br>
+                    <a href="contact.html" class="btn btn-primary text-caps btn-framed">Contact Us</a>
+                </address>
+            </div>
+            <!--end col-md-4-->
+        </div>
+        <!--end row-->
+    </div>
+    <div class="background">
+        <div class="background-image original-size">
+            <img src="~/assets/img/footer-background-icons.jpg" alt="">
+        </div>
+        <!--end background-image-->
+    </div>
+    <!--end background-->
+</section>
+

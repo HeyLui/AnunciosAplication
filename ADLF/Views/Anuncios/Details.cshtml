@@ -1,0 +1,622 @@
+﻿@model ADLF.Models.Anuncio
+
+@using Microsoft.AspNetCore.Http;
+
+
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Varela+Round" rel="stylesheet">
+<link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.css" type="text/css">
+<link href="~/assets/bootstrap/css/bootstrap-grid.css" rel="stylesheet" />
+<link href="~/assets/bootstrap/css/bootstrap-reboot.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/assets/fonts/font-awesome.css" type="text/css">
+<link rel="stylesheet" href="~/assets/css/selectize.css" type="text/css">
+<link rel="stylesheet" href="~/assets/css/style.css">
+<link rel="stylesheet" href="~/assets/css/user.css">
+<link href="~/assets/css/owl.carousel.min.css" rel="stylesheet" />
+<link href="~/assets/css/user.css" rel="stylesheet" />
+<link href="~/assets/fonts/font-awesome.css" rel="stylesheet" />
+
+<style>
+
+    .rating {
+        position: initial;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 200px;
+        height: 30px;
+        padding: 5px -10px;
+        margin: auto;
+        border-radius: 10px;
+        background: #FFF;
+        display: block;
+        overflow: hidden;
+        box-shadow: 0 1px #CCC, 0 5px #DDD, 0 9px 6px -3px #999;
+        unicode-bidi: bidi-override;
+        direction: rtl;
+    }
+
+    .rating:not(:checked) > input {
+        display: none;
+    }
+
+    /* - - - - - RATE */
+    #rate {
+        top: 20px;
+    }
+
+        #rate:not(:checked) > label {
+            cursor: pointer;
+            float: right;
+            width: 30px;
+            height: 30px;
+            display: block;
+            color: rgba(255, 0, 0, 0.40);
+            line-height: 33px;
+            text-align: center;
+        }
+
+            #rate:not(:checked) > label:hover,
+            #rate:not(:checked) > label:hover ~ label {
+                color: rgba(255, 0, 0, 0.60);
+            }
+
+        #rate > input:checked + label:hover,
+        #rate > input:checked + label:hover ~ label,
+        #rate > input:checked ~ label:hover,
+        #rate > input:checked ~ label:hover ~ label,
+        #rate > label:hover ~ input:checked ~ label {
+            color: rgba(211, 0, 0, 0.80);
+        }
+
+        #rate > input:checked ~ label {
+            color: rgb(255, 0, 0);
+        }
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+</style>
+
+
+
+<!--*********************************************************************************************************-->
+<!--************ CONTENT ************************************************************************************-->
+<!--*********************************************************************************************************-->
+<section class="content">
+    <section class="block">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+
+                    <article class="blog-post clearfix">
+                        <a href="#">
+                            <img src="@Url.Action("convertirImagen","Anuncios",new { codigo = Model.IdAd, img = 1 })" alt="">
+                        </a>
+                        <div class="article-title">
+                            <div class="float-right float-xs-none price">
+                                <div class="id opacity-50">
+                                    @if (Model.Calificacion == 0)
+                                    {
+                                        <strong>✰ @Html.DisplayFor(model => model.Calificacion)</strong>
+                                    }
+                                    else
+                                    {
+                                        <strong>⭐ @Html.DisplayFor(model => model.Calificacion)</strong>
+                                    }
+
+
+                                </div>
+                                <div class="id opacity-50">
+                                    <strong>CALIFICACION </strong>
+
+
+                                </div>
+                                <div class="id opacity-50">
+                                    <strong>
+
+
+                                        <a href="#" class="icon text-warning" >
+                                            @if (Model.Calificacion >= 5)
+                                            {
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            }
+                                            else if (Model.Calificacion >= 4)
+                                            {
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+
+                                            }
+                                            else if (Model.Calificacion >= 3)
+                                            {
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+
+                                            }
+                                            else if (Model.Calificacion >= 2)
+                                            {
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+
+                                            }
+                                            else if (Model.Calificacion >= 1)
+                                            {
+                                                <i class="fa fa-star"></i>
+
+                                            }
+                                            else
+                                            {
+                                                <i>SIN VOTOS</i>
+                                            }
+                                        </a>
+
+                                    </strong>
+                                </div>
+                            </div>
+                            <h2><a href="#">@Html.DisplayFor(model => model.NombreAd)</a></h2>
+                            <div class="tags framed">
+                                <a href="#" class="tag">@Html.DisplayFor(model => model.IdTipoadNavigation.CategoriaName)</a>
+
+                            </div>
+                        </div>
+
+                        <form method="post" enctype="multipart/form-data" asp-controller="Anuncios" asp-action="Votacion">
+                            <div class="meta">
+
+
+
+
+                                <figure>
+                                    <i class="fa fa-calendar-o"></i>
+                                    @Html.DisplayFor(model => model.Fecha)
+
+
+                                </figure>
+
+                                <input name="adid" value="@Html.DisplayFor(model => model.IdAd)" hidden />
+                                <input name="id" value="@Context.Session.GetString("usuarioidrec")" hidden />
+                                <div class="float-right  price">
+                                    @if (ViewBag.yaya != null)
+                                    {
+
+
+                                        <input disabled value="HAS VOTADO ESTE ANUNCIO " class="disabled btn btn-success small text-caps" />
+
+                                    }
+                                    else if (ViewBag.yaya == null)
+                                    {
+
+
+                                        <input type="submit" value="ENVIAR VALORACION" class="btn btn-primary small " style="margin-top:-5px;margin-left:-150px;" />
+                                        <section id="rate" class="rating" style="margin-top:-35px;margin-bottom:5px;">
+                                            <!-- FIFTH STAR -->
+                                            <input type="radio" id="star_5" name="voto" value="5.0" />
+                                            <label for="star_5" title="Increible">&#9733;</label>
+                                            <!-- FOURTH STAR -->
+                                            <input type="radio" id="star_4" name="voto" value="4.0" />
+                                            <label for="star_4" title="Muy bueno">&#9733;</label>
+                                            <!-- THIRD STAR -->
+                                            <input type="radio" id="star_3" name="voto" value="3.0" />
+                                            <label for="star_3" title="Bueno">&#9733;</label>
+                                            <!-- SECOND STAR -->
+                                            <input type="radio" id="star_2" name="voto" value="2.0" />
+                                            <label for="star_2" title="Malo">&#9733;</label>
+                                            <!-- FIRST STAR -->
+                                            <input type="radio" id="star_1" name="voto" value="1.0" />
+                                            <label for="star_1" title="Muy malo">&#9733;</label>
+                                        </section>
+
+
+
+                                    }
+
+                                </div>
+
+
+
+                            </div>
+                        </form>
+
+                        <div class="blog-post-content">
+                            <p>
+                                @Html.DisplayFor(model => model.Descripcion)
+                            </p>
+
+
+
+
+                            <div class="float-right float-xs-none price">
+
+                                <a asp-action="Edit" asp-route-id="@Model.IdAd" class="btn btn-info small text-caps">Editar </a>
+
+
+
+                                <button id="myBtn" class="btn btn-warning small text-caps">Eliminar</button>
+
+                                <!-- The Modal -->
+                                <div id="myModal" class="modal">
+
+                                    <!-- Modal content -->
+                                    <div class="modal-content">
+                                        
+                                        <div class="article-title">
+                                            <span class="close" style="float:right;margin-top:-20px;">&times;</span>
+                                            <h1 class="text-danger text-center text-caps opacity-70">¿Estas seguro que quieres eliminar este anuncio?</h1>
+                                            <form method="post" enctype="multipart/form-data" asp-controller="Anuncios" asp-action="Delete">
+                                                <input name="id" value="@Html.DisplayFor(model => model.IdAd)" hidden />
+                                                <input type="submit" class="btn btn-warning btn-block small text-caps float-right" value="Eliminar" />
+                                            </form>
+                                        </div>
+                                        <a href="#">
+                                            <img src="@Url.Action("convertirImagen","Anuncios",new { codigo = Model.IdAd, img = 1 })" alt="">
+                                        </a>
+                                        <div class="article-title">
+                                            <div class="float-right float-xs-none price">
+                                                <div class="id opacity-50">
+                                                    @if (Model.Calificacion == 0)
+                                                    {
+                                                        <strong>✰ @Html.DisplayFor(model => model.Calificacion)</strong>
+                                                    }
+                                                    else
+                                                    {
+                                                        <strong>⭐ @Html.DisplayFor(model => model.Calificacion)</strong>
+                                                    }
+
+
+                                                </div>
+                                                <div class="id opacity-50">
+                                                    <strong>CALIFICACION </strong>
+
+
+                                                </div>
+                                                <div class="id opacity-50">
+                                                    <strong>
+
+
+                                                        <a href="#" class="icon text-warning">
+                                                            @if (Model.Calificacion >= 5)
+                                                            {
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                            }
+                                                            else if (Model.Calificacion >= 4)
+                                                            {
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+
+                                                            }
+                                                            else if (Model.Calificacion >= 3)
+                                                            {
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+
+                                                            }
+                                                            else if (Model.Calificacion >= 2)
+                                                            {
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+
+                                                            }
+                                                            else if (Model.Calificacion >= 1)
+                                                            {
+                                                                <i class="fa fa-star"></i>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <i>SIN VOTOS</i>
+                                                            }
+                                                        </a>
+
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                            <h2><a href="#">@Html.DisplayFor(model => model.NombreAd)</a></h2>
+                                            <div class="tags framed">
+                                                <a href="#" class="tag">@Html.DisplayFor(model => model.IdTipoadNavigation.CategoriaName)</a>
+
+                                            </div>
+                                        </div>
+
+                                        <form method="post" enctype="multipart/form-data" asp-controller="Anuncios" asp-action="Votacion">
+                                            <div class="meta">
+
+
+
+
+                                                <figure>
+                                                    <i class="fa fa-calendar-o"></i>
+                                                    @Html.DisplayFor(model => model.Fecha)
+
+
+                                                </figure>
+
+                                                <input name="adid" value="@Html.DisplayFor(model => model.IdAd)" hidden />
+                                                <input name="id" value="@Context.Session.GetString("usuarioidrec")" hidden />
+
+
+
+
+                                            </div>
+                                        </form>
+
+                                        <div class="blog-post-content">
+                                            <p>
+                                                @Html.DisplayFor(model => model.Descripcion)
+                                            </p>
+
+
+
+
+                                            
+
+                                            <h2>
+
+                                                <a href="">Imagenes de referencia () </a>
+
+
+                                            </h2>
+
+                                            <hr />
+                                            @if (Model.Imagen2 != null)
+                                            {
+
+                                                <img src="@Url.Action("convertirImagen2","Anuncios",new { codigo2 = Model.IdAd, img = 1 })">
+                                                <hr />
+                                            }
+
+                                            @if (Model.Imagen3 != null)
+                                            {
+                                                //550 286
+                                                <img src="@Url.Action("convertirImagen3","Anuncios",new { codigo3 = Model.IdAd, img = 1 })">
+                                                <hr />
+                                            }
+
+
+
+
+
+
+                                            <form method="post" enctype="multipart/form-data" asp-controller="Anuncios" asp-action="Delete">
+                                                <input name="id" value="@Html.DisplayFor(model => model.IdAd)" hidden />
+                                                <input type="submit" class="btn btn-warning btn-block text-caps" value="Eliminar" />
+                                            </form>
+                                            <!--end author-->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <h2>
+
+                                <a href="">Imagenes de referencia (@ViewBag.totalimagenes) </a>
+
+
+                            </h2>
+
+                            <hr />
+                            @if (Model.Imagen2 != null)
+                            {
+
+                                <img src="@Url.Action("convertirImagen2","Anuncios",new { codigo2 = Model.IdAd, img = 1 })">
+                                <hr />
+                            }
+
+                            @if (Model.Imagen3 != null)
+                            {
+                                //550 286
+                                <img src="@Url.Action("convertirImagen3","Anuncios",new { codigo3 = Model.IdAd, img = 1 })">
+                                <hr />
+                            }
+
+
+
+
+
+                            <!--end author-->
+                        </div>
+
+                        <!--end blog-post-content-->
+
+                        
+                    </article>
+
+                    <!--end Article-->
+                    <!--<section>
+                        <div class="blog-posts-navigation clearfix">
+                            <a href="#" class="prev">
+                                <i class="fa fa-chevron-left"></i>
+                                <figure>Previous Post</figure>
+                                <h3>Concrete Decorations</h3>
+                            </a>-->
+                    <!--end prev-->
+                    <!--<a href="#" class="next">
+                            <i class="fa fa-chevron-right"></i>
+                            <figure>Next Post</figure>
+                            <h3>Professional kitchen at your home</h3>
+                        </a>
+                    </div>-->
+                    <!--end blog-posts-navigation-->
+                    <!--</section>-->
+
+               
+
+
+
+
+                </div>
+                <!--end col-md-8-->
+
+                <div class="col-md-4">
+                    <!--============ Side Bar ===============================================================-->
+                    <aside class="sidebar">
+
+
+                        @Html.Partial("~/Views/Anuncios/AnunciosRelacionados.cshtml", ViewData["Relacionados"])
+
+                        @Html.Partial("~/Views/Anuncios/CategoryList.cshtml", ViewData["Categorialist"])
+
+
+                    </aside>
+                    <!--============ End Side Bar ===========================================================-->
+                </div>
+                <!--end col-md-3-->
+            </div>
+        </div>
+        <!--end container-->
+    </section>
+    <!--end block-->
+</section>
+<!--end content-->
+
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+
+
+
+
+
+
+@*<h1>Details</h1>
+
+    <div>
+        <h4>Anuncio</h4>
+        <hr />
+        <dl class="row">
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.NombreAd)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.NombreAd)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Imagen)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Imagen)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Imagen2)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Imagen2)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Imagen3)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Imagen3)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Calificacion)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Calificacion)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Estado)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Estado)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Fecha)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Fecha)
+            </dd>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.IdTipoadNavigation)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.IdTipoadNavigation.IdTipoad)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.IdAd">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>*@

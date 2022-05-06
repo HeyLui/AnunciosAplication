@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ADLF.Models.Anuncio>
+
+
+
+
+<section>
+    <h2>Anuncios Similares</h2>
+    <div class="sidebar-post">
+        @foreach (var item in Model)
+        {
+        <a asp-action="Details" asp-route-id="@item.IdAd" class="background-image" style="background-image:url(@Url.Action("convertirImagen", "Anuncios", new { codigo = item.IdAd, img = 1 }));width:100px;height:100px;background-position:center;">
+
+        </a>
+            <!--end background-image-->
+            <div class="description">
+                <h4>
+                    <a asp-action="Details" asp-route-id="@item.IdAd" >@Html.DisplayFor(modelItem => item.NombreAd)</a>
+                </h4>
+                <div class="meta">
+                    <a href="#">@Html.DisplayFor(modelItem => item.IdTipoadNavigation.CategoriaName)</a>
+                    <figure><i class="fa fa-calendar"></i> - @Html.DisplayFor(modelItem => item.Fecha)</figure>
+                </div>
+                <!--end meta-->
+            </div>
+            <br />
+            <hr />
+        }
+
+        <!--end description-->
+    </div>
+    <!--end sidebar-post-->
+
+   
+
+</section>

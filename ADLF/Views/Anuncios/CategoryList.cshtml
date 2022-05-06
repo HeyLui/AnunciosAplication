@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ADLF.Models.CategoriaAd>
+
+    <section>
+        <h2>Anuncios por categorias</h2>
+        <ul class="sidebar-list list-unstyled">
+            @foreach (var item in Model)
+            {
+            
+                <li>
+                    <form action="@Url.Action("Index", "Anuncios")" method="post">
+                        <input type="submit" name="em" hidden value="@Html.DisplayFor(modelItem => item.IdTipoad)"/>
+                        <input type="submit" name="btnfiltro" class="btn btn-secondary small text-caps" value="@Html.DisplayFor(modelItem => item.CategoriaName)" /><span></span>
+                    </form>
+                    <br />
+                </li>
+            
+                }
+
+</ul>
+    </section>
+
+
+

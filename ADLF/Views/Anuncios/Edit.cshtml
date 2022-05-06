@@ -1,0 +1,263 @@
+﻿@model ADLF.Models.Anuncio
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Varela+Round" rel="stylesheet">
+<link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.css" type="text/css">
+<link href="~/assets/bootstrap/css/bootstrap-grid.css" rel="stylesheet" />
+<link href="~/assets/bootstrap/css/bootstrap-reboot.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/assets/fonts/font-awesome.css" type="text/css">
+<link rel="stylesheet" href="~/assets/css/selectize.css" type="text/css">
+<link rel="stylesheet" href="~/assets/css/style.css">
+<link rel="stylesheet" href="~/assets/css/user.css">
+<link href="~/assets/css/owl.carousel.min.css" rel="stylesheet" />
+<link href="~/assets/css/user.css" rel="stylesheet" />
+<link href="~/assets/fonts/font-awesome.css" rel="stylesheet" />
+
+
+
+<section class="content">
+    <section class="block">
+        <div class="container">
+            @*<section>
+                    <div class="alert alert-warning" role="alert">
+                        <h2 class="alert-heading">You don't have an account!</h2>
+                        <p>
+                            You can submit only 1 ad at a time. To submit more, you need to
+                            <a href="sign-in.html" class="link"><strong>Sign In</strong></a> or
+                            <a href="register.html" class="link"><strong>Register</strong></a>
+                        </p>
+                    </div>
+                </section>*@
+            <form class="form form-submit" asp-action="Edit" enctype="multipart/form-data">
+                <section>
+                    <h2 class="text-danger text-caps">Editar Anuncio</h2>
+                    <input type="hidden" asp-for="IdAd" name="adid" />
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="title" class="col-form-label required">Nombre del anuncio</label>
+                                <input asp-for="NombreAd" name="nombre" type="text" class="form-control" id="title" placeholder="Titulo de anuncio" >
+                            </div>
+                            <!--end form-group-->
+                        </div>
+                        <!--end col-md-8-->
+                        <div class="col-md-4">
+
+                            <div class="form-group">
+                                <label for="submit-category" class="col-form-label required">Categoria del anuncio</label>
+                                <select asp-for="IdTipoad" class="change-tab" asp-items="ViewBag.IdTipoad" name="idtipo"></select>
+
+                            </div>
+                            <!--end form-group-->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <section>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="title" class="col-form-label required">Descripcion del anuncio</label>
+                                    <textarea required asp-for="Descripcion" name="descripcion" id="details" placeholder="Un texto relevante..." class="form-control" cols="200" rows="5" maxlength="700"></textarea>
+                                </div>
+                            </div>
+                            <!--end form-group-->
+                        </section>
+                    </div>
+                </section>
+                <!--end basic information-->
+
+
+                <section style="margin-top:-100px;">
+                    <label for="submit-category" class="col-form-label required">Imagenes </label>
+                    <div class="row">
+
+                        <div class="col-md-4">
+
+                            <div class="file-upload">
+                                <input id=a type=file multiple  class="file-upload-input with-preview" accept="image/*" name="imgphoto" maxlength="1">
+
+                                <span class="text-danger"><i class="fa fa-plus-circle"></i>Imagen 1  </span>
+                            </div>
+                            <div class="file-upload-previews"><img id=img2 style="width:350px;height:350px;"></div>
+                            <br />
+                            
+                            <img style=" background-image: url( @Url.Action("convertirImagen","Anuncios",new { codigo = Model.IdAd, img = 1 }) );width: 350px; height: 350px;">
+                            
+
+                            <!--end form-group-->
+                        </div>
+                        <div class="col-md-4">
+
+
+                            <div class="file-upload">
+                                <input id=i type=file multiple class="file-upload-input with-preview" accept="image/*" name="imgphoto2" maxlength="1">
+
+                                <span><i class="fa fa-plus-circle"></i>Imagen 2  </span>
+                            </div>
+                            <div class="file-upload-previews"><img id=img style="width:350px;height:350px;"></div>
+                            <br />
+                            <img style=" background-image: url( @Url.Action("convertirImagen2","Anuncios",new { codigo2 = Model.IdAd, img = 1 }) );width: 350px; height: 350px;">
+                            <!--end form-group-->
+                        </div>
+                        <div class="col-md-4">
+
+                            <div class="file-upload">
+                                <input id=b type=file multiple class="file-upload-input with-preview" accept="image/*" name="imgphoto3" maxlength="1">
+
+                                <span><i class="fa fa-plus-circle"></i>Imagen 3  </span>
+                            </div>
+                            <div class="file-upload-previews"><img id=img3 style="width:350px;height:350px;"></div>
+                            <br />
+                            <img style=" background-image: url( @Url.Action("convertirImagen3","Anuncios",new { codigo3 = Model.IdAd, img = 1 }) );width: 350px; height: 350px;">
+                            
+                            <!--end form-group-->
+                        </div>
+                    </div>
+
+                </section>
+
+
+
+                <section class="clearfix">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary large icon float-right">Editar Anuncio<i class="fa fa-chevron-right"></i></button>
+                    </div>
+                </section>
+            </form>
+            <!--end form-submit-->
+        </div>
+        <!--end container-->
+    </section>
+    <!--end block-->
+</section>
+<!--end content-->
+
+<script>
+    document.getElementById("i").onchange = function () {
+
+        // create Blob-URL for File (=Blob) object
+        var url = (URL || webkit).createObjectURL(this.files[0]);
+
+        // set Blob-URL as image source:
+        document.getElementById("img").src = url;
+    };
+    document.getElementById("a").onchange = function () {
+
+        // create Blob-URL for File (=Blob) object
+        var url = (URL || webkit).createObjectURL(this.files[0]);
+
+        // set Blob-URL as image source:
+        document.getElementById("img2").src = url;
+    };
+    document.getElementById("b").onchange = function () {
+
+        // create Blob-URL for File (=Blob) object
+        var url = (URL || webkit).createObjectURL(this.files[0]);
+
+        // set Blob-URL as image source:
+        document.getElementById("img3").src = url;
+    };
+</script>
+<script type="~/text/javascript" src="~/assets/js/jquery-3.2.1.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/jquery-validate.bootstrap-tooltip.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/jQuery.MultiFile.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/jquery.nouislider.all.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/map.js"></script>
+<script type="~/text/javascript" src="~/assets/js/markerclusterer_packed.js"></script>
+<script type="~/text/javascript" src="~/assets/js/owl.carousel.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/readmore.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/richmarker-compiled.js"></script>
+<script type="~/text/javascript" src="~/assets/js/jquery-3.3.1.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/popper.min.js"></script>
+<script type="~/text/javascript" src="~/assets/bootstrap/js/bootstrap.min.js"></script>
+<script type="~/text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyBEDfNcQRmKQEyulDN8nGWjLYPm8s4YB58&libraries=places"></script>
+<script type="~/text/javascript" src="~/assets/js/selectize.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/masonry.pkgd.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/icheck.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/jquery.validate.min.js"></script>
+<script type="~/text/javascript" src="~/assets/js/custom.js"></script>
+
+
+
+
+@*<h4>Anuncio</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdAd" name="adid" />
+            <div class="form-group">
+                <label asp-for="NombreAd" class="control-label"></label>
+                <input asp-for="NombreAd" name="nombre" class="form-control" />
+                <span asp-validation-for="NombreAd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Descripcion" class="control-label"></label>
+                <input asp-for="Descripcion" name="descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Imagen" class="control-label"></label>
+                <img src="@Url.Action("convertirImagen","Anuncios",new { codigo = Model.IdAd, img = 1 })" style="width:450px;height:300px;" alt="Art Wallpaper">
+                <input asp-for="Imagen" class="form-control-file" type="file" name="imgphoto" accept="image/*" />
+                <span asp-validation-for="Imagen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Imagen2" class="control-label"></label>
+                @if (Model.Imagen2 != null)
+                {
+                    <img src="@Url.Action("convertirImagen2","Anuncios",new { codigo2 = Model.IdAd, img = 1 })" style="width:450px;height:300px;" alt="Art Wallpaper">
+                }
+
+                <input asp-for="Imagen2" class="form-control" type="file" name="imgphoto2" accept="image/*" />
+                <span asp-validation-for="Imagen2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Imagen3" class="control-label"></label>
+                @if (Model.Imagen3 != null)
+                {
+                    <img src="@Url.Action("convertirImagen3","Anuncios",new { codigo3 = Model.IdAd, img = 1 })" style="width:450px;height:300px;" alt="Art Wallpaper">
+                }
+
+                <input asp-for="Imagen3" class="form-control" type="file" name="imgphoto3" accept="image/*" />
+                <span asp-validation-for="Imagen3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdTipoad" class="control-label"></label>
+                <select asp-for="IdTipoad" name="idtipo" class="form-control" asp-items="ViewBag.IdTipoad"></select>
+                <span asp-validation-for="IdTipoad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Calificacion" class="control-label"></label>
+                <input asp-for="Calificacion" class="form-control" />
+                <span asp-validation-for="Calificacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Estado" class="control-label"></label>
+                <input asp-for="Estado" class="form-control" />
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" class="form-control" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@
+

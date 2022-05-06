@@ -1,0 +1,168 @@
+﻿
+@model IEnumerable<ADLF.Models.Anuncio>
+
+@{
+    ViewData["Title"] = "Anuncios";
+}
+
+
+
+
+
+
+
+<section class="content">
+    <section class="block">
+        <div class="container">
+            <!--============ Section Title===================================================================-->
+            <div class="section-title clearfix">
+                <div class="float-left float-xs-none">
+
+                    
+
+
+
+
+                </div>
+                <div class="float-right d-xs-none thumbnail-toggle">
+                    @*<a href="#" class="change-class active" data-change-from-class="list" data-change-to-class="grid" data-parent-class="items">
+                            <i class="fa fa-th"></i>
+                        </a>
+                        <a href="#" class="change-class" data-change-from-class="grid" data-change-to-class="list" data-parent-class="items">
+                            <i class="fa fa-th-list"></i>
+                        </a>*@
+                </div>
+            </div>
+            <!--============ Items ==========================================================================-->
+            <div class="items grid grid-xl-3-items grid-lg-3-items grid-md-3-items">
+
+                @*FOREACH EMPIEZA AQUI*@
+
+                @foreach (var item in Model)
+
+                {
+
+                    <div class="item">
+                        <div class="ribbon-featured text-caps" style="background-color:red;color:aliceblue;">DESTACADO</div>
+                        <!--end ribbon-->
+                        <div class="wrapper">
+                            <div class="image">
+
+                                <h3>
+
+                                    @*<a href="#" class="tag category" name="btnfiltro">@Html.DisplayFor(modelItem => item.IdTipoadNavigation.CategoriaName)</a>*@
+                                    <a asp-action="Details" asp-route-id="@item.IdAd" class="title text-caps">@Html.DisplayFor(modelItem => item.NombreAd)</a>
+                                    <span class="tag">AD</span>
+                                </h3>
+
+                                <a asp-action="Details" asp-route-id="@item.IdAd" class="image-wrapper">
+                                    @*IMAGEN DEL ANUNCIO*@
+                                    @if (item.Imagen != null)
+                                    {
+                                        <img src="@Url.Action("convertirImagen", "Anuncios", new { codigo = item.IdAd, img = 1 })" style="width:340px;height:260px;" alt="">
+                                    }
+
+
+                                </a>
+                            </div>
+                            <!--end image-->
+                            <form action="@Url.Action("Index", "Anuncios")" method="post">
+                                <h4 class="disabled">
+                                    <strong class="text-caps disabled"><i class="fa fa-arrow-down "></i>CALIFICACION</strong>
+                                    <input type="submit" name="em" hidden value="@Html.DisplayFor(modelItem => item.IdTipoadNavigation.IdTipoad)" />
+
+                                    <input type="submit" name="btnfiltro" class="btn btn-danger small btn-rounded" style="margin-left:125px;" value="@Html.DisplayFor(modelItem => item.IdTipoadNavigation.CategoriaName)" />
+
+                                </h4>
+
+
+                            </form>
+                            @if (item.Calificacion == 0)
+                            {
+                                <div class="price">✰ @Html.DisplayFor(modelItem => item.Calificacion)</div>
+                            }
+                            else
+                            {
+                                <div class="price">⭐ @Html.DisplayFor(modelItem => item.Calificacion)</div>
+                            }
+
+
+
+                            <div class="meta">
+                                <figure>
+                                    <i class="fa fa-calendar-o"></i>@Html.DisplayFor(modelItem => item.Fecha)
+                                </figure>
+                                <figure style="float:right;" >
+                                    <a href="#" class="text-warning" style="cursor:default;">
+
+                                        @if (item.Calificacion >= 5)
+                                        {
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        }
+                                        else if (item.Calificacion >= 4)
+                                        {
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+
+                                        }
+                                        else if (item.Calificacion >= 3)
+                                        {
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+
+                                        }
+                                        else if (item.Calificacion >= 2)
+                                        {
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+
+                                        }
+                                        else if (item.Calificacion >= 1)
+                                        {
+                                            <i class="fa fa-star"></i>
+
+                                        }
+                                        else
+                                        {
+                                            <i asp-action="Details" asp-route-id="@item.IdAd">SIN VOTOS</i>
+                                        }
+
+
+
+                                    </a>
+                                    @*<a>
+                                            <i class="fa fa-user"></i>
+                                        </a>*@
+                                </figure>
+                            </div>
+                            <!--end meta-->
+                            <div class="description">
+                                <p>@Html.DisplayFor(modelItem => item.Descripcion)</p>
+                            </div>
+                            <!--end description-->
+                            <a asp-action="Details" asp-route-id="@item.IdAd" class="detail text-caps underline">Ver Anuncio</a>
+                        </div>
+                    </div>
+                }
+                <!--end item-->
+
+
+
+            </div>
+            <!--============ End Items ======================================================================-->
+           
+            <!--end page-pagination-->
+        </div>
+        <!--end container-->
+    </section>
+    <!--end block-->
+</section>
+<!--end content-->
+

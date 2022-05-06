@@ -1,0 +1,35 @@
+﻿
+    <section class="content">
+        <section class="block">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <form method="post" enctype="multipart/form-data" action="/Users/Iniciar" class="form clearfix" >
+                            <div class="form-group">
+                                <label for="usuario" class="col-form-label required">Usuario</label>
+                                <input name="usuario" type="text" class="form-control" id="email" placeholder="Usuario" required>
+                            </div>
+                            <!--end form-group-->
+                            <div class="form-group">
+                                <label for="contra" class="col-form-label required">Contraseña</label>
+                                <input name="contra" type="password" class="form-control" id="password" placeholder="Contraseña" required>
+                            </div>
+                            <!--end form-group-->
+                            <div class="d-flex justify-content-between align-items-baseline">
+
+                                <input type="submit" class="btn btn-primary" value="Iniciar Sesion"/>
+                            </div>
+                        </form>
+                        <hr>
+                        <p>
+                            No tienes cuenta? - <a href="@Url.Action("Registrar","Home")" class="link"> Crea una aqui.</a>
+                        </p>
+                    </div>
+                    <!--end col-md-6-->
+                </div>
+                <!--end row-->
+            </div>
+            <!--end container-->
+        </section>
+        <!--end block-->
+    </section>

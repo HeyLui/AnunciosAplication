@@ -1,0 +1,46 @@
+﻿@model ADLF.Models.CategoriaAd
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+
+<section class="content">
+    <section class="block">
+        <div class="container">
+            
+            <form class="form form-submit" asp-action="Delete" method="post" enctype="multipart/form-data">
+                <input name="id" type="hidden" asp-for="IdTipoad" />
+                <section>
+                    <h2 class="text-warning text-caps">Eliminar Categoria</h2>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="title" class="col-form-label required">Nombre de la categoria</label>
+                                <input asp-for="CategoriaName" disabled type="text" class="form-control" id="title" placeholder="Nombre de categoria" required>
+                            </div>
+                            <!--end form-group-->
+                        </div>
+                        <!--end col-md-8-->
+                        <div class="col-md-5">
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-warning">Eliminar Categoria<i class="fa fa-chevron-right"></i></button>
+
+                            </div>
+                            <!--end form-group-->
+                        </div>
+                    </div>
+
+                </section>
+                <!--end basic information-->
+            </form>
+            <!--end form-submit-->
+        </div>
+        <!--end container-->
+    </section>
+    <!--end block-->
+</section>
+
