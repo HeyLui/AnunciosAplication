@@ -281,7 +281,7 @@
 
                                     <!-- Modal content -->
                                     <div class="modal-content">
-                                        
+
                                         <div class="article-title">
                                             <span class="close" style="float:right;margin-top:-20px;">&times;</span>
                                             <h1 class="text-danger text-center text-caps opacity-70">¿Estas seguro que quieres eliminar este anuncio?</h1>
@@ -292,6 +292,7 @@
                                         </div>
                                         <a href="#">
                                             <img src="@Url.Action("convertirImagen","Anuncios",new { codigo = Model.IdAd, img = 1 })" alt="">
+
                                         </a>
                                         <div class="article-title">
                                             <div class="float-right float-xs-none price">
@@ -397,7 +398,7 @@
 
 
 
-                                            
+
 
                                             <h2>
 
@@ -407,19 +408,8 @@
                                             </h2>
 
                                             <hr />
-                                            @if (Model.Imagen2 != null)
-                                            {
-
-                                                <img src="@Url.Action("convertirImagen2","Anuncios",new { codigo2 = Model.IdAd, img = 1 })">
-                                                <hr />
-                                            }
-
-                                            @if (Model.Imagen3 != null)
-                                            {
-                                                //550 286
-                                                <img src="@Url.Action("convertirImagen3","Anuncios",new { codigo3 = Model.IdAd, img = 1 })">
-                                                <hr />
-                                            }
+                                            @Html.Partial("~/Views/Anuncios/ListaImages.cshtml", ViewData["Listadeimagenesbyad"])
+                                            
 
 
 
@@ -445,20 +435,8 @@
                             </h2>
 
                             <hr />
-                            @if (Model.Imagen2 != null)
-                            {
 
-                                <img src="@Url.Action("convertirImagen2","Anuncios",new { codigo2 = Model.IdAd, img = 1 })">
-                                <hr />
-                            }
-
-                            @if (Model.Imagen3 != null)
-                            {
-                                //550 286
-                                <img src="@Url.Action("convertirImagen3","Anuncios",new { codigo3 = Model.IdAd, img = 1 })">
-                                <hr />
-                            }
-
+                            @Html.Partial("~/Views/Anuncios/ListaImages.cshtml", ViewData["Listadeimagenesbyad"]) 
 
 
 

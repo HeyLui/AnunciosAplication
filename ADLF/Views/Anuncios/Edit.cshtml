@@ -20,21 +20,92 @@
 <link href="~/assets/css/user.css" rel="stylesheet" />
 <link href="~/assets/fonts/font-awesome.css" rel="stylesheet" />
 
+<style>
+
+    .preview-images-zone {
+        width: 100%;
+        border: 1px solid #ddd;
+        min-height: 180px;
+        /* display: flex; */
+        padding: 5px 5px 0px 5px;
+        position: relative;
+        overflow: auto;
+    }
+
+        .preview-images-zone > .preview-image:first-child {
+            height: 185px;
+            width: 185px;
+            position: relative;
+            margin-right: 5px;
+        }
+
+        .preview-images-zone > .preview-image {
+            height: 90px;
+            width: 90px;
+            position: relative;
+            margin-right: 5px;
+            float: left;
+            margin-bottom: 5px;
+        }
+
+            .preview-images-zone > .preview-image > .image-zone {
+                width: 100%;
+                height: 100%;
+            }
+
+                .preview-images-zone > .preview-image > .image-zone > img {
+                    width: 100%;
+                    height: 100%;
+                }
+
+            .preview-images-zone > .preview-image > .tools-edit-image {
+                position: absolute;
+                z-index: 100;
+                color: #fff;
+                bottom: 0;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+                display: none;
+            }
+
+            .preview-images-zone > .preview-image > .image-cancel {
+                font-size: 18px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                font-weight: bold;
+                margin-right: 10px;
+                cursor: pointer;
+                display: none;
+                z-index: 100;
+            }
+
+    .preview-image:hover > .image-zone {
+        cursor: move;
+        opacity: .5;
+    }
+
+    .preview-image:hover > .tools-edit-image,
+    .preview-image:hover > .image-cancel {
+        display: block;
+    }
+
+    .ui-sortable-helper {
+        width: 90px !important;
+        height: 90px !important;
+    }
+
+    .container {
+        padding-top: 50px;
+    }
+</style>
 
 
 <section class="content">
     <section class="block">
         <div class="container">
-            @*<section>
-                    <div class="alert alert-warning" role="alert">
-                        <h2 class="alert-heading">You don't have an account!</h2>
-                        <p>
-                            You can submit only 1 ad at a time. To submit more, you need to
-                            <a href="sign-in.html" class="link"><strong>Sign In</strong></a> or
-                            <a href="register.html" class="link"><strong>Register</strong></a>
-                        </p>
-                    </div>
-                </section>*@
+            
             <form class="form form-submit" asp-action="Edit" enctype="multipart/form-data">
                 <section>
                     <h2 class="text-danger text-caps">Editar Anuncio</h2>
@@ -43,7 +114,7 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label for="title" class="col-form-label required">Nombre del anuncio</label>
-                                <input asp-for="NombreAd" name="nombre" type="text" class="form-control" id="title" placeholder="Titulo de anuncio" >
+                                <input asp-for="NombreAd" name="nombre" type="text" class="form-control" id="title" placeholder="Titulo de anuncio">
                             </div>
                             <!--end form-group-->
                         </div>
@@ -75,50 +146,60 @@
 
 
                 <section style="margin-top:-100px;">
-                    <label for="submit-category" class="col-form-label required">Imagenes </label>
+                    <label for="submit-category" class="col-form-label required">PORTADA ACTUAL </label>
                     <div class="row">
 
-                        <div class="col-md-4">
+                        <div class="col-md-12">
 
-                            <div class="file-upload">
-                                <input id=a type=file multiple  class="file-upload-input with-preview" accept="image/*" name="imgphoto" maxlength="1">
+                            <img src="@Url.Action("convertirImagen", "Anuncios", new { codigo = Model.IdAd, img = 1 })" style="width:450px;height:255px;" name="imgportada">
+                            <hr />
 
-                                <span class="text-danger"><i class="fa fa-plus-circle"></i>Imagen 1  </span>
-                            </div>
-                            <div class="file-upload-previews"><img id=img2 style="width:350px;height:350px;"></div>
-                            <br />
-                            
-                            <img style=" background-image: url( @Url.Action("convertirImagen","Anuncios",new { codigo = Model.IdAd, img = 1 }) );width: 350px; height: 350px;">
-                            
+
 
                             <!--end form-group-->
                         </div>
-                        <div class="col-md-4">
 
+                    </div>
 
-                            <div class="file-upload">
-                                <input id=i type=file multiple class="file-upload-input with-preview" accept="image/*" name="imgphoto2" maxlength="1">
+                </section>
+                <section style="margin-top:-75px;">
+                    
+                    <div class="row">
 
-                                <span><i class="fa fa-plus-circle"></i>Imagen 2  </span>
-                            </div>
-                            <div class="file-upload-previews"><img id=img style="width:350px;height:350px;"></div>
-                            <br />
-                            <img style=" background-image: url( @Url.Action("convertirImagen2","Anuncios",new { codigo2 = Model.IdAd, img = 1 }) );width: 350px; height: 350px;">
-                            <!--end form-group-->
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
 
                             <div class="file-upload">
-                                <input id=b type=file multiple class="file-upload-input with-preview" accept="image/*" name="imgphoto3" maxlength="1">
+                                <input id="a" type=file multiple class="file-upload-input with-preview" accept="image/apng, image/avif, image/gif, image/jpeg, image/png, image/svg+xml, image/webp" name="addmorephotos">
 
-                                <span><i class="fa fa-plus-circle"></i>Imagen 3  </span>
+                                <span class="text-danger"><i class="fa fa-plus-circle"></i>Agregar mas imagenes</span>
                             </div>
-                            <div class="file-upload-previews"><img id=img3 style="width:350px;height:350px;"></div>
-                            <br />
-                            <img style=" background-image: url( @Url.Action("convertirImagen3","Anuncios",new { codigo3 = Model.IdAd, img = 1 }) );width: 350px; height: 350px;">
-                            
+
+                            <fieldset class="form-group">
+                                <a href="javascript:void(0)" hidden onclick="$('#pro-image').click()">Upload Image</a>
+                                <input type="file" id="pro-image" name="pro-image" style="display: none;" class="form-control" multiple>
+                            </fieldset>
+                            <label for="submit-category" class="col-form-label required">Imagenes actuales </label>
+                            <hr />
+                            <div class="preview-images">
+
+
+                                @Html.Partial("~/Views/Anuncios/EditImagesView.cshtml", ViewData["Listadeimagenesbyad"])
+
+                            </div>
+                            <label for="submit-category" class="col-form-label required">Imagenes nuevas  </label>
+
+                            <div class="preview-images-zone">
+
+
+
+
+                            </div>
+
+
+                            @*<div class="file-upload-previews"><img id=img2 style="width:350px;height:350px;"></div>*@
                             <!--end form-group-->
                         </div>
+
                     </div>
 
                 </section>
@@ -139,31 +220,63 @@
 </section>
 <!--end content-->
 
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
 <script>
-    document.getElementById("i").onchange = function () {
 
-        // create Blob-URL for File (=Blob) object
-        var url = (URL || webkit).createObjectURL(this.files[0]);
 
-        // set Blob-URL as image source:
-        document.getElementById("img").src = url;
-    };
-    document.getElementById("a").onchange = function () {
+    $(document).ready(function () {
+        document.getElementById('a').addEventListener('change', readImage, false);
 
-        // create Blob-URL for File (=Blob) object
-        var url = (URL || webkit).createObjectURL(this.files[0]);
+        $(".preview-images-zone").sortable();
 
-        // set Blob-URL as image source:
-        document.getElementById("img2").src = url;
-    };
-    document.getElementById("b").onchange = function () {
+        $(document).on('click', '.image-cancel', function () {
+            let no = $(this).data('no');
+            $(".preview-image.preview-show-" + no).remove();
+        });
+    });
 
-        // create Blob-URL for File (=Blob) object
-        var url = (URL || webkit).createObjectURL(this.files[0]);
 
-        // set Blob-URL as image source:
-        document.getElementById("img3").src = url;
-    };
+
+    var num = 4;
+    function readImage() {
+        if (window.File && window.FileList && window.FileReader) {
+            var files = event.target.files; //FileList object
+            var output = $(".preview-images-zone");
+
+            for (let i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (!file.type.match('image')) continue;
+
+                var picReader = new FileReader();
+
+
+                picReader.addEventListener('load', function (event) {
+                    var picFile = event.target;
+                    var html = '<div class="preview-image preview-show-' + num + '">' +
+                        '<div class="image-cancel" data-no="' + num + '">x</div>' +
+                        '<div class="image-zone"><img id="pro-img-' + num + '" src="' + picFile.result + '"></div>' +
+                        '<div class="tools-edit-image"></div>' +
+                        '</div>';
+
+                    output.append(html);
+                    num = num + 1;
+                });
+
+                picReader.readAsDataURL(file);
+            }
+            $("#pro-image").val('');
+        } else {
+            console.log('Browser not support');
+        }
+    }
+
+
 </script>
 <script type="~/text/javascript" src="~/assets/js/jquery-3.2.1.min.js"></script>
 <script type="~/text/javascript" src="~/assets/js/jquery-validate.bootstrap-tooltip.min.js"></script>
@@ -188,76 +301,76 @@
 
 
 @*<h4>Anuncio</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdAd" name="adid" />
-            <div class="form-group">
-                <label asp-for="NombreAd" class="control-label"></label>
-                <input asp-for="NombreAd" name="nombre" class="form-control" />
-                <span asp-validation-for="NombreAd" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descripcion" class="control-label"></label>
-                <input asp-for="Descripcion" name="descripcion" class="form-control" />
-                <span asp-validation-for="Descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Imagen" class="control-label"></label>
-                <img src="@Url.Action("convertirImagen","Anuncios",new { codigo = Model.IdAd, img = 1 })" style="width:450px;height:300px;" alt="Art Wallpaper">
-                <input asp-for="Imagen" class="form-control-file" type="file" name="imgphoto" accept="image/*" />
-                <span asp-validation-for="Imagen" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Imagen2" class="control-label"></label>
-                @if (Model.Imagen2 != null)
-                {
-                    <img src="@Url.Action("convertirImagen2","Anuncios",new { codigo2 = Model.IdAd, img = 1 })" style="width:450px;height:300px;" alt="Art Wallpaper">
-                }
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="IdAd" name="adid" />
+                <div class="form-group">
+                    <label asp-for="NombreAd" class="control-label"></label>
+                    <input asp-for="NombreAd" name="nombre" class="form-control" />
+                    <span asp-validation-for="NombreAd" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Descripcion" class="control-label"></label>
+                    <input asp-for="Descripcion" name="descripcion" class="form-control" />
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Imagen" class="control-label"></label>
+                    <img src="@Url.Action("convertirImagen","Anuncios",new { codigo = Model.IdAd, img = 1 })" style="width:450px;height:300px;" alt="Art Wallpaper">
+                    <input asp-for="Imagen" class="form-control-file" type="file" name="imgphoto" accept="image/*" />
+                    <span asp-validation-for="Imagen" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Imagen2" class="control-label"></label>
+                    @if (Model.Imagen2 != null)
+                    {
+                        <img src="@Url.Action("convertirImagen2","Anuncios",new { codigo2 = Model.IdAd, img = 1 })" style="width:450px;height:300px;" alt="Art Wallpaper">
+                    }
 
-                <input asp-for="Imagen2" class="form-control" type="file" name="imgphoto2" accept="image/*" />
-                <span asp-validation-for="Imagen2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Imagen3" class="control-label"></label>
-                @if (Model.Imagen3 != null)
-                {
-                    <img src="@Url.Action("convertirImagen3","Anuncios",new { codigo3 = Model.IdAd, img = 1 })" style="width:450px;height:300px;" alt="Art Wallpaper">
-                }
+                    <input asp-for="Imagen2" class="form-control" type="file" name="imgphoto2" accept="image/*" />
+                    <span asp-validation-for="Imagen2" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Imagen3" class="control-label"></label>
+                    @if (Model.Imagen3 != null)
+                    {
+                        <img src="@Url.Action("convertirImagen3","Anuncios",new { codigo3 = Model.IdAd, img = 1 })" style="width:450px;height:300px;" alt="Art Wallpaper">
+                    }
 
-                <input asp-for="Imagen3" class="form-control" type="file" name="imgphoto3" accept="image/*" />
-                <span asp-validation-for="Imagen3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdTipoad" class="control-label"></label>
-                <select asp-for="IdTipoad" name="idtipo" class="form-control" asp-items="ViewBag.IdTipoad"></select>
-                <span asp-validation-for="IdTipoad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Calificacion" class="control-label"></label>
-                <input asp-for="Calificacion" class="form-control" />
-                <span asp-validation-for="Calificacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                    <input asp-for="Imagen3" class="form-control" type="file" name="imgphoto3" accept="image/*" />
+                    <span asp-validation-for="Imagen3" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="IdTipoad" class="control-label"></label>
+                    <select asp-for="IdTipoad" name="idtipo" class="form-control" asp-items="ViewBag.IdTipoad"></select>
+                    <span asp-validation-for="IdTipoad" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Calificacion" class="control-label"></label>
+                    <input asp-for="Calificacion" class="form-control" />
+                    <span asp-validation-for="Calificacion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Estado" class="control-label"></label>
+                    <input asp-for="Estado" class="form-control" />
+                    <span asp-validation-for="Estado" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Fecha" class="control-label"></label>
+                    <input asp-for="Fecha" class="form-control" />
+                    <span asp-validation-for="Fecha" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
 

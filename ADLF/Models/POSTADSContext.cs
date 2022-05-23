@@ -19,6 +19,7 @@ namespace ADLF.Models
 
         public virtual DbSet<Anuncio> Anuncios { get; set; }
         public virtual DbSet<CategoriaAd> CategoriaAds { get; set; }
+        public virtual DbSet<ImagenesbyAd> ImagenesbyAds { get; set; }
         public virtual DbSet<PuntajeUserAd> PuntajeUserAds { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Tuser> Tusers { get; set; }
@@ -27,6 +28,7 @@ namespace ADLF.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Server=(localdb)\\Servicios;Database=POSTADS;Trusted_Connection=True;");
             }
         }
@@ -56,12 +58,6 @@ namespace ADLF.Models
 
                 entity.Property(e => e.IdTipoad).HasColumnName("idTipoad");
 
-                entity.Property(e => e.Imagen).HasColumnType("image");
-
-                entity.Property(e => e.Imagen2).HasColumnType("image");
-
-                entity.Property(e => e.Imagen3).HasColumnType("image");
-
                 entity.Property(e => e.NombreAd)
                     .HasMaxLength(70)
                     .IsUnicode(false);
@@ -81,6 +77,22 @@ namespace ADLF.Models
                 entity.Property(e => e.CategoriaName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ImagenesbyAd>(entity =>
+            {
+                entity.HasKey(e => e.Idimgad);
+
+                entity.ToTable("ImagenesbyAD");
+
+                entity.Property(e => e.Idimgad).HasColumnName("IDIMGAD");
+
+                entity.Property(e => e.Image).HasColumnType("image");
+
+                entity.HasOne(d => d.IdAdNavigation)
+                    .WithMany(p => p.ImagenesbyAds)
+                    .HasForeignKey(d => d.IdAd)
+                    .HasConstraintName("FK_ImagenesbyAD_Anuncios");
             });
 
             modelBuilder.Entity<PuntajeUserAd>(entity =>

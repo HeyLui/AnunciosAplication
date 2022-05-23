@@ -57,10 +57,10 @@
 
                                 <a asp-action="Details" asp-route-id="@item.IdAd" class="image-wrapper">
                                     @*IMAGEN DEL ANUNCIO*@
-                                    @if (item.Imagen != null)
+                                    @*@if (item.Imagen != null)
                                     {
                                         <img src="@Url.Action("convertirImagen", "Anuncios", new { codigo = item.IdAd, img = 1 })" style="width:340px;height:260px;" alt="">
-                                    }
+                                    }*@
 
 
                                 </a>

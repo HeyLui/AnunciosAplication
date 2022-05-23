@@ -11,13 +11,17 @@ namespace ADLF.Repositories
     {
         Task<IEnumerable<Anuncio>> GetAll();
         Task<Anuncio> GetById(int id);
-        Task<Anuncio> Insert(Anuncio tentidad, IFormFile imgphoto, IFormFile imgphoto2, IFormFile imgphoto3, string nombre, string descripcion, int? idtipo);
-        Task<Anuncio> Update(Anuncio tentidad, IFormFile imgphoto, IFormFile imgphoto2, IFormFile imgphoto3, string nombre, string descripcion, int? idtipo, int? adid);
+        Task<Anuncio> Insert(Anuncio tentidad, List<IFormFile> proimage, string nombre, string descripcion, int? idtipo, int portada);
+        Task<Anuncio> Update(Anuncio tentidad, List<IFormFile> addmorephotos, string nombre, string descripcion, int? idtipo, int? adid, int? idimgadsaved,int? editarportada);
         Task Delete(int id);
 
         Task<IEnumerable<Anuncio>> Buscador(string buscador, string opcion, string btnfiltro, int? em);
 
         Task<Anuncio> Votacion(Anuncio anuncios, double voto, int? id, int? adid);
         Task<IEnumerable<Anuncio>> Destacados();
+
+        //APARTADO TABLA DE IMAGENES
+        Task<ImagenesbyAd> Buscarimagenid(int idimgdelete);
+        Task EliminarUnaImagen(int idimgdelete);
     }
 }

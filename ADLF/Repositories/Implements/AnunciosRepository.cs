@@ -21,567 +21,151 @@ namespace ADLF.Repositories.Implements
         }
 
 
-        public async Task<Anuncio> Update(Anuncio tentidad, IFormFile imgphoto, IFormFile imgphoto2, IFormFile imgphoto3, string nombre, string descripcion, int? idtipo, int? adid)
+        public async Task<Anuncio> Update(Anuncio tentidad, List<IFormFile> addmorephotos, string nombre, string descripcion, int? idtipo, int? adid, int? idimgadsaved, int? editarportada)
         {
             var busquedafotos = _postadscontext.Set<Anuncio>().Include(z => z.IdTipoadNavigation).Where(z => z.IdAd == adid).FirstOrDefault();
 
-            if (imgphoto != null)
-
+            if(editarportada != null)
             {
-                if (imgphoto.Length > 0)
+                var idpondelete = _postadscontext.Set<ImagenesbyAd>().Where(z => z.IdAd == adid && z.Portada == true).Select(z => z.Idimgad).FirstOrDefault();
+                var cambiarestado = _postadscontext.Set<ImagenesbyAd>().Where(z => z.Idimgad == idpondelete).ToList();
+                
 
-                //Convert Image to byte and save to database
 
-                {
-                    //VALIDAMOS SI IMAGE 2 VIENE NULLA 
-                    if (imgphoto2 != null)
-                    {
-                        if (imgphoto.Length > 0)
-                        {
-                            if (imgphoto3 != null)
-                            {
-                                if (imgphoto3.Length > 0)
-                                {
-                                    byte[] p1 = null;
-                                    using (var fs1 = imgphoto.OpenReadStream())
-                                    using (var ms1 = new MemoryStream())
-                                    {
-                                        fs1.CopyTo(ms1);
-                                        p1 = ms1.ToArray();
-                                    }
-                                    byte[] p2 = null;
-                                    using (var fs2 = imgphoto2.OpenReadStream())
-                                    using (var ms2 = new MemoryStream())
-                                    {
-
-                                        fs2.CopyTo(ms2);
-                                        p2 = ms2.ToArray();
-
-                                    }
-                                    byte[] p3 = null;
-                                    using (var fs3 = imgphoto3.OpenReadStream())
-                                    using (var ms3 = new MemoryStream())
-                                    {
-
-                                        fs3.CopyTo(ms3);
-                                        p3 = ms3.ToArray();
-
-                                    }
-                                    tentidad.Imagen = p1;
-                                    tentidad.Imagen2 = p2;
-                                    tentidad.Imagen3 = p3;
-
-                                    var quer = from xv in _postadscontext.Anuncios where xv.IdAd == adid select xv;
-
-                                    foreach (Anuncio cv in quer)
-                                    {
-
-                                        cv.NombreAd = nombre;
-                                        cv.Descripcion = descripcion;
-                                        cv.Imagen = p1;
-                                        cv.Imagen2 = p2;
-                                        cv.Imagen3 = p3;
-                                        cv.IdTipoad = idtipo;
-
-                                    };
-
-
-
-                                    await _postadscontext.SaveChangesAsync();
-
-
-                                }
-                            }
-                            else
-                            {
-                                byte[] p1 = null;
-                                using (var fs1 = imgphoto.OpenReadStream())
-                                using (var ms1 = new MemoryStream())
-                                {
-                                    fs1.CopyTo(ms1);
-                                    p1 = ms1.ToArray();
-                                }
-                                byte[] p2 = null;
-                                using (var fs2 = imgphoto2.OpenReadStream())
-                                using (var ms2 = new MemoryStream())
-                                {
-
-                                    fs2.CopyTo(ms2);
-                                    p2 = ms2.ToArray();
-
-                                }
-                                tentidad.Imagen = p1;
-                                tentidad.Imagen2 = p2;
-
-
-                                var quer = from xv in _postadscontext.Anuncios where xv.IdAd == adid select xv;
-
-                                foreach (Anuncio cv in quer)
-                                {
-
-                                    cv.NombreAd = nombre;
-                                    cv.Descripcion = descripcion;
-                                    cv.Imagen = p1;
-                                    cv.Imagen2 = p2;
-                                    cv.Imagen3 = busquedafotos.Imagen3;
-                                    cv.IdTipoad = idtipo;
-
-                                };
-
-
-                                await _postadscontext.SaveChangesAsync();
-
-                            }
-
-                        }
-
-                    }
-                    //SI VIENE IMAGEN 3 LLENO Y 2 NO 
-                    else
-                    {
-                        if (imgphoto3 != null)
-                        {
-                            if (imgphoto3.Length > 0)
-                            {
-                                //SI VIENE IMAGEN VALIDA SI SOLO VIENE LA 3 I LA 2 VACIA 
-                                //AQUI SOLO GUARDA IMAGEN 1 Y 3 
-                                byte[] p1 = null;
-                                using (var fs1 = imgphoto.OpenReadStream())
-                                using (var ms1 = new MemoryStream())
-                                {
-                                    fs1.CopyTo(ms1);
-                                    p1 = ms1.ToArray();
-                                }
-                                byte[] p3 = null;
-                                using (var fs3 = imgphoto3.OpenReadStream())
-                                using (var ms3 = new MemoryStream())
-                                {
-
-                                    fs3.CopyTo(ms3);
-                                    p3 = ms3.ToArray();
-
-                                }
-                                tentidad.Imagen = p1;
-                                tentidad.Imagen3 = p3;
-
-                                var quer = from xv in _postadscontext.Anuncios where xv.IdAd == adid select xv;
-
-                                foreach (Anuncio cv in quer)
-                                {
-
-                                    cv.NombreAd = nombre;
-                                    cv.Descripcion = descripcion;
-                                    cv.Imagen = p1;
-                                    cv.Imagen2 = busquedafotos.Imagen2;
-                                    cv.Imagen3 = p3;
-                                    cv.IdTipoad = idtipo;
-
-                                };
-
-                                await _postadscontext.SaveChangesAsync();
-
-
-
-                            }
-
-                        }
-                        //aqui solo muestra si solo cargamos una foto 
-                        else
-                        {
-                            byte[] p1 = null;
-                            using (var fs1 = imgphoto.OpenReadStream())
-                            using (var ms1 = new MemoryStream())
-                            {
-                                fs1.CopyTo(ms1);
-                                p1 = ms1.ToArray();
-                            }
-
-                            tentidad.Imagen = p1;
-
-                            var quer = from xv in _postadscontext.Anuncios where xv.IdAd == adid select xv;
-
-                            foreach (Anuncio cv in quer)
-                            {
-
-                                cv.NombreAd = nombre;
-                                cv.Descripcion = descripcion;
-                                cv.Imagen = p1;
-                                cv.Imagen2 = busquedafotos.Imagen2;
-                                cv.Imagen3 = busquedafotos.Imagen3;
-                                cv.IdTipoad = idtipo;
-
-                            };
-
-
-                            await _postadscontext.SaveChangesAsync();
-
-                        }
-                    }
-
-
-
-
-
-                }
-            }
-            else if (imgphoto2 != null)
-            {
-                if (imgphoto2.Length > 0)
-                {
-                    if (imgphoto3 != null)
-                    {
-                        if (imgphoto3.Length > 0)
-                        {
-                            
-                            byte[] p2 = null;
-                            using (var fs2 = imgphoto2.OpenReadStream())
-                            using (var ms2 = new MemoryStream())
-                            {
-
-                                fs2.CopyTo(ms2);
-                                p2 = ms2.ToArray();
-
-                            }
-                            byte[] p3 = null;
-                            using (var fs3 = imgphoto3.OpenReadStream())
-                            using (var ms3 = new MemoryStream())
-                            {
-
-                                fs3.CopyTo(ms3);
-                                p3 = ms3.ToArray();
-
-                            }
-                            
-                            tentidad.Imagen2 = p2;
-                            tentidad.Imagen3 = p3;
-
-                            var quer = from xv in _postadscontext.Anuncios where xv.IdAd == adid select xv;
-
-                            foreach (Anuncio cv in quer)
-                            {
-
-                                cv.NombreAd = nombre;
-                                cv.Descripcion = descripcion;
-                                cv.Imagen = busquedafotos.Imagen;
-                                cv.Imagen2 = p2;
-                                cv.Imagen3 = p3;
-                                cv.IdTipoad = idtipo;
-
-                            };
-                            await _postadscontext.SaveChangesAsync();
-
-
-                        }
-                    }
-                    else
-                    {
-                        
-                        byte[] p2 = null;
-                        using (var fs2 = imgphoto2.OpenReadStream())
-                        using (var ms2 = new MemoryStream())
-                        {
-
-                            fs2.CopyTo(ms2);
-                            p2 = ms2.ToArray();
-
-                        }
-                        
-
-                        tentidad.Imagen2 = p2;
-
-
-                        var quer = from xv in _postadscontext.Anuncios where xv.IdAd == adid select xv;
-
-                        foreach (Anuncio cv in quer)
-                        {
-
-                            cv.NombreAd = nombre;
-                            cv.Descripcion = descripcion;
-                            cv.Imagen = busquedafotos.Imagen;
-                            cv.Imagen2 = p2;
-                            cv.Imagen3 = busquedafotos.Imagen;
-                            cv.IdTipoad = idtipo;
-
-                        };
-                        await _postadscontext.SaveChangesAsync();
-                    }
-                }
-            }
-            else if (imgphoto3 != null)
-            {
-                if (imgphoto3.Length > 0)
-                {
-                    
-                    byte[] p3 = null;
-                    using (var fs3 = imgphoto3.OpenReadStream())
-                    using (var ms3 = new MemoryStream())
-                    {
-
-                        fs3.CopyTo(ms3);
-                        p3 = ms3.ToArray();
-
-                    }
-                    
-                    tentidad.Imagen3 = p3;
-
-                    var quer = from xv in _postadscontext.Anuncios where xv.IdAd == adid select xv;
-
-                    foreach (Anuncio cv in quer)
-                    {
-
-                        cv.NombreAd = nombre;
-                        cv.Descripcion = descripcion;
-                        cv.Imagen = busquedafotos.Imagen;
-                        cv.Imagen2 = busquedafotos.Imagen2;
-                        cv.Imagen3 = p3;
-                        cv.IdTipoad = idtipo;
-
-                    };
-                    await _postadscontext.SaveChangesAsync();
-                }
-            }
-
-            else
-            {
-
-                var quer = from xv in _postadscontext.Anuncios where xv.IdAd == adid select xv;
-
-                foreach (Anuncio cv in quer)
+                foreach (ImagenesbyAd cv in cambiarestado)
                 {
 
-                    cv.NombreAd = nombre;
-                    cv.Descripcion = descripcion;
-                    cv.Imagen = busquedafotos.Imagen;
-                    cv.Imagen2 = busquedafotos.Imagen2;
-                    cv.Imagen3 = busquedafotos.Imagen3;
-                    cv.IdTipoad = idtipo;
+                    cv.Portada = false;
+
+                };
+                
+                var quer = from xv in _postadscontext.ImagenesbyAds where xv.Idimgad == editarportada select xv;
+                foreach (ImagenesbyAd cv in quer)
+                {
+
+                    cv.Portada = true;
 
                 };
                 await _postadscontext.SaveChangesAsync();
             }
-
-            
-            return tentidad;
-        }
-
-        public async Task<Anuncio> Insert(Anuncio tentidad, IFormFile imgphoto, IFormFile imgphoto2, IFormFile imgphoto3, string nombre, string descripcion, int? idtipo)
-        {
-           
+            if(addmorephotos != null)
             {
-
-            }
-                if (imgphoto != null)
-
+                List<IFormFile> uploadedFiles = new List<IFormFile>();
+                foreach (IFormFile foto in addmorephotos)
                 {
-                    if (imgphoto.Length > 0)
 
-                    //Convert Image to byte and save to database
-
+                    byte[] p1 = null;
+                    using (var fs1 = foto.OpenReadStream())
+                    using (var ms1 = new MemoryStream())
                     {
-                        //VALIDAMOS SI IMAGE 2 VIENE NULLA 
-                        if (imgphoto2 != null)
-                        {
-                            if (imgphoto.Length > 0)
-                            {
-                                if (imgphoto3 != null)
-                                {
-                                    if (imgphoto3.Length > 0)
-                                    {
-                                        byte[] p1 = null;
-                                        using (var fs1 = imgphoto.OpenReadStream())
-                                        using (var ms1 = new MemoryStream())
-                                        {
-                                            fs1.CopyTo(ms1);
-                                            p1 = ms1.ToArray();
-                                        }
-                                        byte[] p2 = null;
-                                        using (var fs2 = imgphoto2.OpenReadStream())
-                                        using (var ms2 = new MemoryStream())
-                                        {
-
-                                            fs2.CopyTo(ms2);
-                                            p2 = ms2.ToArray();
-
-                                        }
-                                        byte[] p3 = null;
-                                        using (var fs3 = imgphoto3.OpenReadStream())
-                                        using (var ms3 = new MemoryStream())
-                                        {
-
-                                            fs3.CopyTo(ms3);
-                                            p3 = ms3.ToArray();
-
-                                        }
-
-
-                                        tentidad.Imagen = p1;
-                                        tentidad.Imagen2 = p2;
-                                        tentidad.Imagen3 = p3;
-
-
-
-
-
-
-
-                                        var nuevad = new Anuncio
-                                        {
-                                            NombreAd = nombre,
-                                            Descripcion = descripcion,
-                                            Imagen = p1,
-                                            Imagen2 = p2,
-                                            Imagen3 = p3,
-                                            IdTipoad = idtipo,
-                                            Calificacion = 0,
-                                            Estado = false,
-                                            Fecha = Convert.ToString(DateTime.Now.ToString("g", CultureInfo.CreateSpecificCulture("en-US"))),
-
-                                        };
-                                        _postadscontext.Add(nuevad);
-                                        await _postadscontext.SaveChangesAsync();
-                                        return nuevad;
-
-                                    }
-                                }
-                                else
-                                {
-                                    byte[] p1 = null;
-                                    using (var fs1 = imgphoto.OpenReadStream())
-                                    using (var ms1 = new MemoryStream())
-                                    {
-                                        fs1.CopyTo(ms1);
-                                        p1 = ms1.ToArray();
-                                    }
-                                    byte[] p2 = null;
-                                    using (var fs2 = imgphoto2.OpenReadStream())
-                                    using (var ms2 = new MemoryStream())
-                                    {
-
-                                        fs2.CopyTo(ms2);
-                                        p2 = ms2.ToArray();
-
-                                    }
-                                    tentidad.Imagen = p1;
-                                    tentidad.Imagen2 = p2;
-
-
-
-                                    var nuevad = new Anuncio
-                                    {
-                                        NombreAd = nombre,
-                                        Descripcion = descripcion,
-                                        Imagen = p1,
-                                        Imagen2 = p2,
-                                        Imagen3 = tentidad.Imagen3,
-                                        IdTipoad = idtipo,
-                                        Calificacion = 0,
-                                        Estado = false,
-                                        Fecha = Convert.ToString(DateTime.Now.ToString("g", CultureInfo.CreateSpecificCulture("en-US"))),
-
-                                    };
-                                    _postadscontext.Add(nuevad);
-                                    await _postadscontext.SaveChangesAsync();
-                                    return nuevad;
-                                }
-
-                            }
-
-                        }
-                        //SI VIENE IMAGEN 3 LLENO Y 2 NO 
-                        else
-                        {
-                            if (imgphoto3 != null)
-                            {
-                                if (imgphoto3.Length > 0)
-                                {
-                                    //SI VIENE IMAGEN VALIDA SI SOLO VIENE LA 3 I LA 2 VACIA 
-                                    //AQUI SOLO GUARDA IMAGEN 1 Y 3 
-                                    byte[] p1 = null;
-                                    using (var fs1 = imgphoto.OpenReadStream())
-                                    using (var ms1 = new MemoryStream())
-                                    {
-                                        fs1.CopyTo(ms1);
-                                        p1 = ms1.ToArray();
-                                    }
-                                    byte[] p3 = null;
-                                    using (var fs3 = imgphoto3.OpenReadStream())
-                                    using (var ms3 = new MemoryStream())
-                                    {
-
-                                        fs3.CopyTo(ms3);
-                                        p3 = ms3.ToArray();
-
-                                    }
-                                    tentidad.Imagen = p1;
-                                    tentidad.Imagen3 = p3;
-
-
-
-                                    var nuevad = new Anuncio
-                                    {
-                                        NombreAd = nombre,
-                                        Descripcion = descripcion,
-                                        Imagen = p1,
-                                        Imagen2 = tentidad.Imagen2,
-                                        Imagen3 = p3,
-                                        IdTipoad = idtipo,
-                                        Calificacion = 0,
-                                        Estado = false,
-                                        Fecha = Convert.ToString(DateTime.Now.ToString("g", CultureInfo.CreateSpecificCulture("en-US"))),
-
-                                    };
-                                    _postadscontext.Add(nuevad);
-                                    await _postadscontext.SaveChangesAsync();
-                                    return nuevad;
-
-
-                                }
-
-                            }
-                            //aqui solo muestra si solo cargamos una foto 
-                            else
-                            {
-                                byte[] p1 = null;
-                                using (var fs1 = imgphoto.OpenReadStream())
-                                using (var ms1 = new MemoryStream())
-                                {
-                                    fs1.CopyTo(ms1);
-                                    p1 = ms1.ToArray();
-                                }
-
-                                tentidad.Imagen = p1;
-
-
-
-
-                                var nuevad = new Anuncio
-                                {
-                                    NombreAd = nombre,
-                                    Descripcion = descripcion,
-                                    Imagen = p1,
-                                    Imagen2 = tentidad.Imagen2,
-                                    Imagen3 = tentidad.Imagen3,
-                                    IdTipoad = idtipo,
-                                    Calificacion = 0,
-                                    Estado = false,
-                                    Fecha = Convert.ToString(DateTime.Now.ToString("g", CultureInfo.CreateSpecificCulture("en-US"))),
-
-                                };
-                                _postadscontext.Add(nuevad);
-                                await _postadscontext.SaveChangesAsync();
-                                return nuevad;
-                            }
-                        }
-
-
-
-
-
+                        fs1.CopyTo(ms1);
+                        p1 = ms1.ToArray();
                     }
+
+
+                    var imageads = new ImagenesbyAd
+                    {
+
+                        Image = p1,
+                        IdAd = adid,
+                        Portada = false,
+
+                    };
+                    _postadscontext.Add(imageads);
+                    await _postadscontext.SaveChangesAsync();
+
+
+
+
+
                 }
 
-            //_postadscontext.Set<Anuncio>().Add(tentidad);
-            //await _postadscontext.SaveChangesAsync();
+               
+            }
+            var query = from xv in _postadscontext.Anuncios where xv.IdAd == adid select xv;
+
+            foreach (Anuncio cv in query)
+            {
+
+                cv.NombreAd = nombre;
+                cv.Descripcion = descripcion;
+                cv.IdTipoad = idtipo;
+
+            };
+            await _postadscontext.SaveChangesAsync();
+
+
+
+            return  tentidad;
+        }
+
+        public async Task<Anuncio> Insert(Anuncio tentidad, List<IFormFile> imgphoto, string nombre, string descripcion, int? idtipo, int portada)
+        {
+            //portada = portada + 1;
+            var nuevad = new Anuncio
+            {
+                NombreAd = nombre,
+                Descripcion = descripcion,
+                IdTipoad = idtipo,
+                Calificacion = 0,
+                Estado = false,
+                Fecha = Convert.ToString(DateTime.Now.ToString("g", CultureInfo.CreateSpecificCulture("en-US"))),
+
+            };
+            _postadscontext.Add(nuevad);
+            await _postadscontext.SaveChangesAsync();
+
+
+            List<IFormFile> uploadedFiles = new List<IFormFile>();
+            foreach (IFormFile foto in imgphoto)
+            {
+
+                byte[] p1 = null;
+                using (var fs1 = foto.OpenReadStream())
+                using (var ms1 = new MemoryStream())
+                {
+                    fs1.CopyTo(ms1);
+                    p1 = ms1.ToArray();
+                }
+
+                
+                    var imageads = new ImagenesbyAd
+                    {
+                        Image = p1,
+                        IdAd = nuevad.IdAd,
+                        Portada = false,
+
+                    };
+                    _postadscontext.Add(imageads);
+                await _postadscontext.SaveChangesAsync();
+
+                
+
+
+              
+            }
+            var xlist = _postadscontext.ImagenesbyAds.Where(s => s.IdAd == nuevad.IdAd ).Select(z => z.Portada == false);
+            //var xlist = _postadscontext.ImagenesbyAds.Where(s => s.IdAd == nuevad.IdAd && s.Portada == false).ToList();
+            if (xlist != null)
+            {
+                var xx = _postadscontext.ImagenesbyAds.Where(s => s.IdAd == nuevad.IdAd).FirstOrDefault().Idimgad;
+                var x2 = _postadscontext.ImagenesbyAds.Where(s => s.IdAd == nuevad.IdAd).Skip(portada).Select(l => l.Idimgad).FirstOrDefault();
+                var entity = await GetById(x2);
+
+                var quer = (from xv in _postadscontext.ImagenesbyAds where xv.IdAd == nuevad.IdAd && xv.Portada == false select xv).Skip(portada).Take(1);
+
+                foreach (ImagenesbyAd cv in quer)
+                {
+
+                    cv.Portada = true;
+
+                };
+            }
+            await _postadscontext.SaveChangesAsync();
+
+
+
+
             return tentidad;
         }
 
@@ -595,10 +179,15 @@ namespace ADLF.Repositories.Implements
         public async Task Delete(int id)
         {
             var entity = await GetById(id);
-
+            //--------------------------------SE ELIMINAN PRIMERO TODAS LAS IMAGENES DE ESTE ANUNCIO
+            var images = from xv in _postadscontext.ImagenesbyAds where xv.IdAd == id select xv;
+            _postadscontext.Set<ImagenesbyAd>().RemoveRange(images);
+            //--------------------------------SE ELIMINAN PRIMERO TODOS LOS PUNTAJES DE ESTE ANUNCIO
+            var puntaje = from xv in _postadscontext.PuntajeUserAds where xv.IdAd == id select xv;
+            _postadscontext.Set<PuntajeUserAd>().RemoveRange(puntaje);
+            //--------------------------------ELIMINAMOS EL ANUNCIO
             if (entity == null)
                 throw new Exception("Esta entidad es nula");
-
             _postadscontext.Set<Anuncio>().Remove(entity);
             await _postadscontext.SaveChangesAsync();
 
@@ -725,6 +314,32 @@ namespace ADLF.Repositories.Implements
         public async Task<IEnumerable<Anuncio>> Destacados()
         {
             return await _postadscontext.Set<Anuncio>().Where(z => z.Calificacion > 2).Include(z => z.IdTipoadNavigation).ToListAsync();
+        }
+
+        public async Task<ImagenesbyAd> Buscarimagenid(int idimgdelete)
+        {
+
+            return await _postadscontext.Set<ImagenesbyAd>().Include(z => z.IdAdNavigation).FirstOrDefaultAsync(m => m.Idimgad == idimgdelete);
+
+        }
+
+        public async Task EliminarUnaImagen(int idimgdelete)
+        {
+            var entity = await Buscarimagenid(idimgdelete);
+            //--------------------------------SE ELIMINAN PRIMERO TODAS LAS IMAGENES EN ESE ANUNCIO
+            
+
+            if (entity == null)
+                throw new Exception("Esta entidad es nula");
+            _postadscontext.Set<ImagenesbyAd>().Remove(entity);
+            await _postadscontext.SaveChangesAsync();
+
+
+
+
+
+        
+
         }
     }
 }

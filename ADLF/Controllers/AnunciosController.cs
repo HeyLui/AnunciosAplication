@@ -59,73 +59,67 @@ namespace ADLF.Controllers
 
             using (var context = new POSTADSContext())
             {
-                
-                var foto = (from i in context.Anuncios
+
+                var foto = (from i in context.ImagenesbyAds
                             where i.IdAd == codigo
-                            select i).FirstOrDefault();
-               // var contador = context.PuntajeUserAds.Where(x => x.IdAdNavigation.IdAd == codigo).Count();
+                            select i).FirstOrDefault(z => z.Portada == true);
 
+                //var picfoto = ivm.ImagenesbyAds.Where(y => y.IdAd == codigo && y.Portada == true).Select(i => i.Image);
+                //Cont
+                var contador = context.PuntajeUserAds.Where(x => x.IdAdNavigation.IdAd == codigo).Count();
 
-                return File(foto.Imagen,  "Imagenes/jpg");
+                //ViewBag.fotoportada =  File(foto.Image, "Imagenes/jpg");
+
+                if (foto != null)
+                {
+                    return File(foto.Image, "Imagenes/jpg");
+                }
+                else
+                {
+                    return View();
+                }
+                
             }
 
 
 
         }
-        public ActionResult convertirImagen2(int codigo2)
+
+        public ActionResult convertirImagenLista(int codigolista)
         {
-            
+
             using (var context = new POSTADSContext())
-              {
+            {
 
-                 var foto = (from i in context.Anuncios
-                                        where i.IdAd == codigo2
-                                        select i).FirstOrDefault();
+                var foto = (from i in context.ImagenesbyAds
+                            where i.Idimgad == codigolista
+                            select i).FirstOrDefault(o => o.Portada == false);
 
-                    if (foto.Imagen2 == null)
-                    {
+                //var picfoto = ivm.ImagenesbyAds.Where(y => y.IdAd == codigo && y.Portada == true).Select(i => i.Image);
+                //Cont
+                var contador = context.PuntajeUserAds.Where(x => x.IdAdNavigation.IdAd == codigolista).Count();
 
-                        return RedirectToAction("Index", "Details", new { codigo2 });
-                    }
-                    else
-                    {
-                        return File(foto.Imagen2, "Imagenes/jpg");
-                    }
+                //ViewBag.fotoportada =  File(foto.Image, "Imagenes/jpg");
 
-                    
-               }
-
-            
-           
-
-        }
-        public ActionResult convertirImagen3(int codigo3)
-        {
-
-            
-                using (var context = new POSTADSContext())
+                if (foto != null)
                 {
-
-                    var foto = (from i in context.Anuncios
-                                where i.IdAd == codigo3
-                                select i).FirstOrDefault();
-
-                    if (foto.Imagen3 == null)
-                    {
-
-                        return RedirectToAction("Index", "Details", new { codigo3 });
-                    }
-                    else
-                    {
-                        return File(foto.Imagen3, "Imagenes/jpg");
-                    }
+                    return File(foto.Image, "Imagenes/jpg");
+                }
+                else
+                {
+                    return View();
                 }
 
-            
-            
-           
+            }
+
+
 
         }
+
+
+
+
+        //}
 
         //GET: Anuncios/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -134,16 +128,21 @@ namespace ADLF.Controllers
             {
                 return NotFound();
             }
-            var contaimagenes1 = ivm.Anuncios.Where(z => z.IdAd == id).Select(z => z.Imagen).Count();
-            var contaimagenes2 = ivm.Anuncios.Where(z => z.IdAd == id).Select(z => z.Imagen2).Count();
-            var contaimagenes3 = ivm.Anuncios.Where(z => z.IdAd == id).Select(z => z.Imagen3).Count();
-            ViewBag.totalimagenes = contaimagenes1 + contaimagenes2 + contaimagenes3;
+            var contaimagenes = ivm.ImagenesbyAds.Where(z => z.IdAd == id && z.Portada == false).Select(z => z.Image).Count();
+
+            ViewBag.totalimagenes = contaimagenes;
             var idcate  = (from xv in ivm.Anuncios where xv.IdAd == id select xv.IdTipoad).FirstOrDefault();
             ///
             var anunciosrelevantes = ivm.Anuncios.Include(z => z.IdTipoadNavigation).Where(z => z.IdTipoadNavigation.IdTipoad == idcate).Take(5);
             ViewData["Relacionados"] =  anunciosrelevantes;
             ////
-            
+            /// ///
+            /// 
+
+            var listadeimagenesbyad = ivm.ImagenesbyAds.Include(z => z.IdAdNavigation).Where(z => z.IdAdNavigation.IdAd == id && z.Portada == false).ToList();
+            ViewData["Listadeimagenesbyad"] = listadeimagenesbyad;
+            ////
+
             var contador = ivm.CategoriaAds.ToList();
 
             ViewData["Categorialist"] = contador;
@@ -212,14 +211,14 @@ namespace ADLF.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdAd,NombreAd,Descripcion,Imagen,Imagen2,Imagen3,IdTipoad,Calificacion,Estado,Fecha")] Anuncio anuncio, IFormFile imgphoto, IFormFile imgphoto2, IFormFile imgphoto3, string nombre, string descripcion, int? idtipo)
+        public async Task<IActionResult> Create([Bind("IdAd,NombreAd,Descripcion,Imagen,Imagen2,Imagen3,IdTipoad,Calificacion,Estado,Fecha")] Anuncio anuncio,  List<IFormFile> imgphoto, string nombre, string descripcion, int? idtipo, int portada)
         {
             if (ModelState.IsValid)
             {
                 //METODO CREATE "INSERT" DESDE EL REPOSITORIO
-                anuncio = await anunciosRepository.Insert(anuncio, imgphoto, imgphoto2, imgphoto3, nombre, descripcion,  idtipo);
+                anuncio = await anunciosRepository.Insert(anuncio, imgphoto, nombre, descripcion, idtipo, portada);
                 var id = anuncio.IdAd;
-                
+
                 return RedirectToAction(nameof(Index));
             }
             //Llamamos al contexto para mostrar lista en selectbox
@@ -234,10 +233,11 @@ namespace ADLF.Controllers
             {
                 return NotFound();
             }
-           
+            var listadeimagenesbyad = ivm.ImagenesbyAds.Include(z => z.IdAdNavigation).Where(z => z.IdAdNavigation.IdAd == id && z.Portada == false).ToList();
+            ViewData["Listadeimagenesbyad"] = listadeimagenesbyad;
             var anuncio = await anunciosRepository.GetById(id.Value);
             if (anuncio == null)
-            {
+            {                
                 return NotFound();
             }
             ViewData["IdTipoad"] = new SelectList(ivm.CategoriaAds, "IdTipoad", "CategoriaName", anuncio.IdTipoad);
@@ -249,7 +249,7 @@ namespace ADLF.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? id, [Bind("IdAd,NombreAd,Descripcion,Imagen,Imagen2,Imagen3,IdTipoad,Calificacion,Estado,Fecha")] Anuncio anuncio, IFormFile imgphoto, IFormFile imgphoto2, IFormFile imgphoto3, string nombre, string descripcion, int? idtipo, int? adid)
+        public async Task<IActionResult> Edit(int? id, [Bind("IdAd,NombreAd,Descripcion,Imagen,Imagen2,Imagen3,IdTipoad,Calificacion,Estado,Fecha")] Anuncio anuncio, List<IFormFile> addmorephotos,  string nombre, string descripcion, int? idtipo, int? adid , int? idimgadsaved, int? editarportada)
         {
             if (id == null)
             {
@@ -258,7 +258,7 @@ namespace ADLF.Controllers
 
             if (ModelState.IsValid)
             {
-                anuncio = await anunciosRepository.Update(anuncio,  imgphoto, imgphoto2, imgphoto3, nombre,  descripcion,  idtipo, adid);
+                anuncio = await anunciosRepository.Update(anuncio, addmorephotos, nombre,  descripcion,  idtipo, adid, idimgadsaved, editarportada);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdTipoad"] = new SelectList(ivm.CategoriaAds, "IdTipoad", "CategoriaName", anuncio.IdTipoad);
@@ -292,6 +292,14 @@ namespace ADLF.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //ELIMINAR UNA IMAGEN SOLA 
+        [HttpPost]
+        public async Task<IActionResult> ElimarUnaImagen(int idimgdelete, int adid)
+        {
+            await anunciosRepository.EliminarUnaImagen(idimgdelete);
+
+            return RedirectToAction("Edit", "Anuncios", new { Id = adid });
+        }
         //private bool AnuncioExists(int id)
         //{
         //    return _context.Anuncios.Any(e => e.IdAd == id);

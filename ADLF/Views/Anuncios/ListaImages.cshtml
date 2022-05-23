@@ -1,0 +1,10 @@
+﻿@model IEnumerable<ADLF.Models.ImagenesbyAd>
+
+
+@foreach (var item in Model)
+{
+    <img src="@Url.Action("convertirImagenLista","Anuncios",new { codigolista = item.Idimgad, img = 1 })">
+    <hr />
+}
+
+    
